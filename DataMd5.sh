@@ -8,18 +8,31 @@ password='heming'
 database='anti_cheat'
 table='InboxMsgList'
 
-limit=3;
+limit=100
 
-mysql -h $ip -u $username -p$password -D $database -A -Ne "select content from $table limit $limit" 2>error.log | 
-awk -F'\t' '{
-    if(NR==NR) {
-        #$0="\047" $0 "\047";
-        gsub(/\r/,"\\\\r\\");
-    }
-    {
-        print $0;
-    }
-}' > result.txt
+#num=$(mysql -h $ip -u $username -p$password -D $database -A -Ne "select count(*) from $table limit $limit" 2>error.log);
 
-#cat result.txt |  while read line ; do php -r 'echo md5($line);'>>result.txt;  done
-cat result.txt |  while read line ; do echo -n $line | md5 >>result.txt;  done
+num=1000
+
+for ((i=0; i<$num;)) 
+do
+    $(mysql -h $ip -u $username -p$password -D $database -A -Ne "select content from $table limit $i,$limit" 2>error.log | 
+    while read line; do 
+        result=$(echo -n $line | awk -F'\t' '{
+        {
+            #$0="\047" $0 "\047";
+            gsub(/\r/,"\\r");
+            gsub(/n/,"\\n");
+        }
+        {
+            print $0;
+        }}');
+
+        #echo -n $result | md5 >> ./result/$i.txt;
+        echo $result >> ./result/$i.txt;
+    done) &
+
+    let "i+=$limit";
+done
+
+wait

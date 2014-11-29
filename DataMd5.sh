@@ -8,7 +8,7 @@ password='heming'
 database='anti_cheat'
 table='InboxMsgList'
 
-limit=1000000
+limit=100000
 
 num=$(mysql -h $ip -u $username -p$password -D $database -A -Ne "select count(*) from $table" 2>error.log);
 
@@ -28,14 +28,14 @@ do
 
         qq=$(echo -n $result | grep -Eo "[0-9⒋⒌⒍⒐⒎]+");
         
-        printf "$line\t" >> ./result/$i.txt;
+        echo -en "$line\t" >> ./result/$i.txt;
   
         if [ -z "$qq" ]; then
-            echo -n $result | md5 >> ./result/$i.txt;
+            echo $result | md5 >> ./result/$i.txt;
         else
             qq=$(echo -n $qq | sed 's/[[:space:]]//g');
-            printf "$qq\t" >> ./result/$i.txt;
-            echo -n $qq | md5 >> ./result/$i.txt;
+            echo -en "$qq\t" >> ./result/$i.txt;
+            echo $qq | md5 >> ./result/$i.txt;
         fi 
     done) &
 
@@ -44,4 +44,4 @@ done
 
 wait
 
-#cat ./result/*.txt > ./result/result.txt
+cat ./result/*.txt > ./result/result.txt

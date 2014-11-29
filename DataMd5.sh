@@ -14,7 +14,7 @@ num=$(mysql -h $ip -u $username -p$password -D $database -A -Ne "select count(*)
 
 for ((i=0; i<$num;)) 
 do
-    $(mysql -h $ip -u $username -p$password -D $database -A -Ne "select sourceId, destId, reservedStr, content from $table limit $i,$limit" 2>error.log | 
+    $(mysql -h $ip -u $username -p$password -D $database -A -Ne "select id, sourceId, destId, reservedStr, content from $table limit $i,$limit" 2>error.log | 
     while read line; do 
         result=$(echo -n "'$line'" | awk -F'\t' '{
         {
@@ -23,20 +23,33 @@ do
             gsub(/n/,"\\n");
         }
         {
-            print $4;
+            print $5;
         }}');
 
         qq=$(echo -n $result | grep -Eo "[0-9⒋⒌⒍⒐⒎]+");
         
-        echo -en "$line\t" >> ./result/$i.txt;
-  
-        if [ -z "$qq" ]; then
-            echo -n $result | md5 >> ./result/$i.txt;
+        if [ -z "$qq" ] || [ ${#qq} -lt 4 ]; then
+            encryption=$(echo -n $result | md5)
         else
             qq=$(echo -n $qq | sed 's/[[:space:]]//g');
-            echo -en "$qq\t" >> ./result/$i.txt;
-            echo -n $qq | md5 >> ./result/$i.txt;
+            encryption=$(echo -n $qq | md5);
         fi 
+        
+        if [ -f "./result/$i.txt" ]; then
+            isExists=$(grep -o $encryption ./result/$i.txt);
+        fi
+
+        if [ -z "$isExists" ]; then
+            echo -en "$line\t" >> ./result/$i.txt;
+
+            if [ -z "$qq" ] || [ ${#qq} -lt 4 ]; then
+                echo -en "as content" >> ./result/$i.txt;
+            else
+                echo -en "$qq\t" >> ./result/$i.txt;
+            fi
+
+            echo $encryption >> ./result/$i.txt;
+        fi
     done) &
 
     let "i+=$limit";

@@ -31,11 +31,11 @@ do
         echo -en "$line\t" >> ./result/$i.txt;
   
         if [ -z "$qq" ]; then
-            echo $result | md5 >> ./result/$i.txt;
+            echo -n $result | md5 >> ./result/$i.txt;
         else
             qq=$(echo -n $qq | sed 's/[[:space:]]//g');
             echo -en "$qq\t" >> ./result/$i.txt;
-            echo $qq | md5 >> ./result/$i.txt;
+            echo -n $qq | md5 >> ./result/$i.txt;
         fi 
     done) &
 

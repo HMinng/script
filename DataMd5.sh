@@ -26,7 +26,7 @@ do
             print $5;
         }}');
 
-        qq=$(echo -n $result | grep -Eo "[0-9⒋⒌⒍⒐⒎]+");
+        qq=$(echo -n $result | grep -Eo "[0-9⒈⒉⒊⒋⒌⒍⒎⒏⒐⒑①②③④⑤⑥⑦⑧⑨⑩⑴⑵⑶⑷⑸⑹⑺⑻⑼⑽❶❷❸❹❺❻❼❽❾❿㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹ１２３４５６７８９０一二三四五六七八九零壹贰叁肆伍陆柒捌玖]+");
         
         if [ -z "$qq" ] || [ ${#qq} -lt 4 ]; then
             encryption=$(echo -n $result | md5)
@@ -45,12 +45,14 @@ do
             echo -en "$line\t" >> ./result/$i.txt;
 
             if [ -z "$qq" ] || [ ${#qq} -lt 4 ]; then
-                echo -en "as content" >> ./result/$i.txt;
+                echo -en "as content\t" >> ./result/$i.txt;
             else
                 echo -en "$qq\t" >> ./result/$i.txt;
             fi
 
             echo $encryption >> ./result/$i.txt;
+        else
+            echo $encryption >> ./result/encryption.tt;
         fi
     done) &
 

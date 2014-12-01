@@ -36,7 +36,9 @@ do
         fi 
         
         if [ -f "./result/$i.txt" ]; then
-            isExists=$(grep -o $encryption ./result/$i.txt);
+            isExists=$(cat ./result/$i.txt | grep -o $encryption);
+        else
+            isExists="";
         fi
 
         if [ -z "$isExists" ]; then

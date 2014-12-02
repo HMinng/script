@@ -42,12 +42,12 @@ do
         fi
 
         if [ -z "$isExists" ]; then
-            echo -en "$line\t" >> ./result/$i.txt;
-
+            echo -en "$line" >> ./result/$i.txt;
+            
             if [ -z "$qq" ] || [ ${#qq} -lt 4 ]; then
-                echo -en "as content\t" >> ./result/$i.txt;
+                echo -en "\tas content\t" >> ./result/$i.txt;
             else
-                echo -en "$qq\t" >> ./result/$i.txt;
+                echo -en "\t$qq\t" >> ./result/$i.txt;
             fi
 
             echo $encryption >> ./result/$i.txt;

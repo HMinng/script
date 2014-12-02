@@ -2,7 +2,7 @@
 # @describe:
 # @author:   Ming He(jackhm18@gmail.com)
 
-total=10;
+total=20;
 num=$(cat ./result/result.txt | wc -l);
 
 complicating=50;
@@ -31,8 +31,8 @@ do
         num=$(cat ./result/encryption.tt | grep "$encryption"  | wc -l);
 
         if [ "$num" -ge "$total" ]; then
-            echo -e "$line" >> ./result/h_{$i}.tt
-            echo -e "$encryption $num" >> ./result/g_${i}.tt
+            echo -e "$line" >> ./result/h.tt
+            echo -e "$encryption $num" >> ./result/g.tt
         fi
     done) &
     

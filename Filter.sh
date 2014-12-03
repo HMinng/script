@@ -2,7 +2,7 @@
 # @describe:
 # @author:   Ming He(jackhm18@gmail.com)
 
-total=20;
+total=50;
 num=$(cat ./result/result.txt | wc -l);
 
 complicating=50;

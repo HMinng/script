@@ -10,8 +10,7 @@ table='normal'
 
 file=dict.tt
 
-num=$(cat $file | wc -l);
-cat $file | while read line; 
+sort -k1n $file | uniq | while read line; 
 do 
     result=$(echo -n "'$line'" | awk -F'\t' '{
     {
@@ -26,5 +25,5 @@ do
 
     date=$(date '+%s');
 
-    mysql -h $ip -u $username -p${password} -D $database -e "insert into ${table}(content, uniqe_code, gmt_created) value('$line', '$encryption', $date)";
+    mysql -h $ip -u $username -p${password} -D $database -e "insert into ${table}(content, uniqe_code, gmt_created) value('$line', '$encryption', $date)" 2>>error.log;
 done

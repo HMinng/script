@@ -11,7 +11,7 @@ table='normal'
 file=dict.tt
 
 num=$(cat $file | wc -l);
-$(cat $file | while read line; 
+cat $file | while read line; 
 do 
     result=$(echo -n "'$line'" | awk -F'\t' '{
     {
@@ -22,11 +22,9 @@ do
         print $1;
     }}');
 
-    encryption=$(echo -n $result | md5)
+    encryption=$(echo -n $result | md5);
 
-    echo -en "$line" >> ./result/1.txt;
+    date=$(date '+%s');
 
-    echo -en "\t" >> ./result/1.txt;
-
-    echo $encryption >> ./result/1.txt;
+    mysql -h $ip -u $username -p${password} -D $database -e "insert into ${table}(content, uniqe_code, gmt_created) value('$line', '$encryption', $date)";
 done

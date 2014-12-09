@@ -2,8 +2,6 @@
 # @describe:
 # @author:   Ming He(jackhm18@gmail.com)
 
-#num=$(mysql -h 172.16.4.126 -u msgSEC -pCdeT*WiRr$ -D nmsg_center_5 -A -e "select count(*) from InboxMsgList98 where reservedStr=1010010003 and createDate BETWEEN '2014-11-24 00:00:00' and '2014-11-25 00:00:00';" 2>/dev/null | sed -n '2p');
-
 ip='172.16.4.126'
 username='msgSEC'
 password='CdeT*WiRr$'

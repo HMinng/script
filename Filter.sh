@@ -2,10 +2,22 @@
 # @describe:
 # @author:   Ming He(jackhm18@gmail.com)
 
-total=50;
-num=$(cat ./result/result.txt | wc -l);
+base=./result/tt/
+resultFileName=result.txt
+encryptionFileName=encryption.tt
+gFileName=g.tt
+hFileName=h.tt
+uniqe=uniqe.tt
 
-complicating=50;
+
+if [ ! -f ${base}${uniqe} ]; then
+    awk -F'\t' '{print $7}' ${base}${resultFileName} >> ${base}${encryptionFileName};
+    sort ${base}${encryptionFileName} | uniq > ${base}${uniqe}
+fi
+
+num=$(cat ${base}${uniqe} | wc -l);
+
+complicating=200;
 
 let "integer=$num/$complicating";
 let "remainder=$num%$complicating";
@@ -24,16 +36,13 @@ for ((i=1; i<=$num;))
 do
     let "endPlace=$complicating*$j";
     
-    $(sed -n "${i},${endPlace}p" ./result/result.txt | while read line; 
+    $(sed -n "${i},${endPlace}p" ${base}${uniqe} | while read line; 
     do
-        encryption=$(echo -n "$line" | awk -F'\t' '{print $7}');
+        match=$(cat ${base}${resultFileName} | grep $line | tail -n 1);
+        echo -e $match >> ${base}${hFileName};
 
-        num=$(cat ./result/encryption.tt | grep "$encryption"  | wc -l);
-
-        if [ "$num" -ge "$total" ]; then
-            echo -e "$line" >> ./result/h.tt
-            echo -e "$encryption $num" >> ./result/g.tt
-        fi
+        total=$(cat ${base}${encryptionFileName} | grep $line | wc -l);
+        echo -e "${line}\t${total}" >> ${base}${gFileName};
     done) &
     
     let "i+=$complicating";

@@ -2,13 +2,13 @@
 # @describe:
 # @author:   Ming He(jackhm18@gmail.com)
 
-ip='192.168.20.43'
+ip='127.0.0.1'
 username='root'
 password='heming'
 database='anti_cheat'
 table='InboxMsgList'
 
-limit=100000
+limit=20000
 
 num=$(mysql -h $ip -u $username -p$password -D $database -A -Ne "select count(*) from $table" 2>error.log);
 

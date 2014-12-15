@@ -9,7 +9,7 @@ database='anti_cheat'
 port=3307
 table='normal'
 
-file=1.tt
+file=dict.tt
 
 sort -k1n $file | uniq | while read line; 
 do 

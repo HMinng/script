@@ -42,7 +42,7 @@ do
         echo -e $match >> ${base}${hFileName};
 
         total=$(cat ${base}${encryptionFileName} | grep $line | wc -l);
-        echo -e "${line}\t${total}" >> ${base}${gFileName};
+        echo -e "$total\t$line" >> ${base}${gFileName};
     done) &
     
     let "i+=$complicating";

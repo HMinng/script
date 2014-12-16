@@ -23,7 +23,7 @@ do
     }}');
 
     encryption=$(echo -n $result | md5);
-
+#    echo -e "$encryption" >> dict1.tt;
     date=$(date '+%s');
 
     mysql -h $ip -u $username -p${password} -D $database -P $port -e "insert into ${table}(content, uniqe_code, gmt_created) value('$line', '$encryption', $date)" 2>>error.log;

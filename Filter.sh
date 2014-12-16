@@ -39,7 +39,7 @@ do
     $(sed -n "${i},${endPlace}p" ${base}${uniqe} | while read line; 
     do
         match=$(cat ${base}${resultFileName} | grep $line | tail -n 1);
-        echo -e $match >> ${base}${hFileName};
+        echo -e "$match" >> ${base}${hFileName};
 
         total=$(cat ${base}${encryptionFileName} | grep $line | wc -l);
         echo -e "$total\t$line" >> ${base}${gFileName};

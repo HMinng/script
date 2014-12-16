@@ -3,8 +3,8 @@
 # @author:   Ming He(jackhm18@gmail.com)
 
 
-g=./tt/g.tt
-h=./tt/h.txt
+g=./result/tt/g.tt
+h=./result/tt/h.txt
 
 cat $g | while read line;
 do

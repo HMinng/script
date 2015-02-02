@@ -7,8 +7,8 @@ username='msgSEC'
 password='CdeT*WiRr$'
 database='nmsg_center_5'
 
-startDate='2014-12-11 00:00:00';
-endDate='2014-12-12 00:00:00';
+startDate='2015-01-01 00:00:00';
+endDate='2015-01-23 00:00:00';
 
 limit=500;
 
@@ -16,7 +16,7 @@ limit=500;
 #where='reservedStr=1010010003';
 
 #主站、3g手写信
-where='reservedStr in (1002010001, 1002040001, 1003010001, 1010010001, 1020010001, 1307010001)';
+where='reservedStr in (1002010001, 1002040001, 1003010001, 1010010001, 1020010001, 1307010001, 1013010050, 1020010001, 1408010001)';
 
 
 for i in {0..99}
@@ -24,14 +24,12 @@ do
     if [ $i -lt 10 ]; then
         i=0$i;
     fi
-    mysql -h $ip -u $username -p$password -D $database -A -e 'set names utf8' 2>>error.log;
-
     num=$(mysql -h $ip -u $username -p$password -D $database -A -e "select count(*) from InboxMsgList$i where $where and createDate BETWEEN '$startDate' and '$endDate';" 2>>error.log | sed -n '2p');
     
     j=0;
     while [ $j -lt $num ]
     do
-        result=$(mysql -h $ip -u $username -p$password -D $database -A -e "select * from InboxMsgList$i where $where and createDate BETWEEN '$startDate' and '$endDate' limit $j,$limit" 2>>error.log | awk -F'\t' -v limit="$limit" 'BEGIN{data=""}{
+        result=$(mysql -h $ip -u $username -p$password -D $database -A -e "set names utf8;select * from InboxMsgList$i where $where and createDate BETWEEN '$startDate' and '$endDate' limit $j,$limit" 2>>error.log | awk -F'\t' -v limit="$limit" 'BEGIN{data=""}{
             gsub(/\\\\/,"\\");
             if(NR!=1){
                 i=1;
@@ -69,7 +67,6 @@ do
 
         echo $result > 1.sql;
 
-        mysql -u 127.0.0.1 -u root -pheming -D anti_cheat -A -e "set names utf8" 2>>error.log;
         #mysql -h 192.168.20.43 -u root -pheming -D anti_cheat < 1.sql 2>>error.log;
         mysql -h 127.0.0.1 -u root -pheming -D anti_cheat < 1.sql 2>>error.log;
 

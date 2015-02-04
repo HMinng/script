@@ -3,13 +3,23 @@
 file=tmp.tt
 out=out.tt
 
-cat $file | awk 'BEING{SUM=0}{
-    if(NR % 8 != 0) {
-        SUM += $1;
+cat $file | awk 'BEING{SUM=0;KEY="";VALUE=""}{
+    if(NR == 1) {
+        SUM += $1
+        KEY = $2
+        VALUE = $4
     }else{
-        SUM += $1;
-        print SUM"\t"$2"\t"$4
-        SUM=0
+        if($2 == KEY) {
+            SUM += $1
+        } else {
+            print SUM"\t"KEY"\t"VALUE
+            
+            SUM = 0
+            KEY = $2
+            VALUE = $4
+
+            SUM += $1
+        }
     }
 }' | sort -k 1 -nr > out.tt
 
